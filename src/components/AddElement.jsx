@@ -3,12 +3,30 @@ import ToBeDone from "./ToBeDone";
 import addLogo from "../assets/arrow.svg"
 import { useCallback, useState } from "react";
 import { useRef } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
+import useDetectMobile from "../hooks/useDetectMobile";
+import { useEffect } from "react";
 
 const AddElement = () => {
     const inputValue = useRef(null);
     const [idNumber, setIdNumber] = useState(0);
     const [toDoList, setToDoList] = useState([]);
     const [doneList, setDoneList] = useState([]);
+    const [localKey, setLocalKey] = useLocalStorage('keyName', false);
+    const device = useDetectMobile();
+
+    //here we declare wich string needs to be returned light or dark (We use this to change classnames)
+    const wichModeIsActive = useCallback(() => {
+        if(device==="desktop"){
+          return  localKey === true ? "light" : "dark"
+        }else{
+            return "light"
+        }
+    },[device, localKey])
+    //here we controll body background color based on wich mode light/dark was choosen
+    useEffect(() => {
+        document.body.style.backgroundColor = wichModeIsActive() === 'light' ? "rgb(220, 224, 228)" : "rgb(29,29,41)" 
+    }, [wichModeIsActive])
 
     // add entered text to toDoList when add button is clicked
     const addToDo = (e) => {
@@ -39,23 +57,29 @@ const AddElement = () => {
     },[])
 
         return(
-            <div className="wrapper">
+            // since we get from  wichModeIsActive()  either light or dark string, we use it next to calssname to add ther names
+            <div className={`wrapper ${wichModeIsActive()}`}>
                 <div className="add-wrapper">
-                <form onSubmit={addToDo} className="add-box">
-                    <input ref={inputValue} type="text" placeholder="Add New Task"/>
-                    <button type="submit">
-                    <img src={addLogo} alt="logo" />
-                    </button>
-                </form>
+                    {/* light-dark mode */}
+                    <div className={`mode-${wichModeIsActive()}`} onClick={() => {setLocalKey((prev)=>!prev)}}>
+                    </div> 
+                    {/* form to add input text */}
+                    <form onSubmit={addToDo} className="add-box">
+                        <input ref={inputValue} type="text" placeholder="Add New Task"/>
+                        <button type="submit">
+                        <img src={addLogo} alt="logo" />
+                        </button>
+                    </form>
                 </div>
+
                 <div className="flex-box">
-                    <h3>To Do List</h3>
+                    <h3 className={`todo-title ${wichModeIsActive()}`}>To Do List</h3>
                     {toDoList.map((el) => (
                        <ToBeDone key={el.id} id={el.id} name={el.name} action={changeList}/>
                     ))}
                 </div>
                 <div className="flex-box">
-                    <h3>Done List</h3>
+                    <h3 className={`todo-title ${wichModeIsActive()}`}>Done List</h3>
                     {doneList.map((e) => ( 
                        <Done key={e.id} id={e.id} name={e.name} actionReturn={returnElement} actionRemove={removeElement}/>
                     ))}

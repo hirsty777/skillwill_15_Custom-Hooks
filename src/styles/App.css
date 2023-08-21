@@ -7,10 +7,41 @@
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: min-content;
     row-gap: 1.5rem;
-    background-color: rgba(37,39,60,255);
     border-radius: 1rem;
+}
+/*=========== light-dark mode styles ==========*/
+/*DIV with icon to change modes*/
+.mode-light, .mode-dark{
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+    width: 30px;
+    height: 30px;
+    margin:10px auto;
+    background-image: url("../assets/light.png");
+    background-repeat: no-repeat;
+    background-size:contain;
+    transition: all 0.5s ease-in-out;
+}
+.mode-dark{
+    background-image: url("../assets/dark.png");
+}
+/* change =>Main Theme<= colors*/
+.wrapper.light{
+    background-color: rgb(220, 224, 228);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.377);
+}
+.todo-title.light{
+    color: rgb(0, 0, 0);
+}
+.wrapper.dark{
+    background-color: rgba(37,39,60,255);
     box-shadow: 0 0 1rem rgba(255, 255, 255, 0.377);
 }
+.todo-title.dark{
+    color: rgb(255, 255, 255);
+}
+
 .flex-box{
     display: flex;
     flex-direction: column;
@@ -20,9 +51,8 @@
 .flex-box:nth-child(2){
     border-right: 1px solid rgb(24, 70, 3);
 }
-h3{
+.todo-title{
     align-self: center;
-    color: rgb(255, 255, 255);
 }
 /* Add box styles ===== */
 .add-wrapper{
@@ -36,15 +66,15 @@ h3{
     justify-content: center;
     align-items: center;
     width: 100%;
-    min-height: 100px;
+    min-height: 50px;
 }
 .add-box input{
     width: 30%;
-    padding: 0.5rem;
+    padding: 8px;
     border: none;
     outline: none;
-    border-top-left-radius: 0.8rem;
-    border-bottom-left-radius: 0.8rem;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
 .add-box input:hover{
     outline: 2px solid rgb(19, 109, 42);
